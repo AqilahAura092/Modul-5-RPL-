@@ -54,3 +54,4 @@ class BukuView(ctk.CTk):
 if __name__ == "__main__":
     app = BukuView()
     app.mainloop()
+    # Tes commit ulang untuk dokumentasi praktikum
