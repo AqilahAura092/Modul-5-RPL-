@@ -12,11 +12,18 @@ class BukuModel:
         cursor.close()
         return result
 
+    def create_buku(self, judul, penulis, tahun_terbit):
+        cursor = self.db.cursor()
+        query = "INSERT INTO buku (judul, penulis, tahun_terbit) VALUES (%s, %s, %s)"
+        cursor.execute(query, (judul, penulis, tahun_terbit))
+        self.db.commit()
+        cursor.close()
+        return True
+
     def update_buku(self, id_buku, judul, penulis, tahun_terbit):
         cursor = self.db.cursor()
-        # Mengubah data ID 4 (atau data yang ingin di-update) menjadi ID 10
-        sql = "UPDATE buku SET id_buku = %s, judul = %s, penulis = %s, tahun_terbit = %s WHERE id_buku = 4"
-        val = (id_buku, judul, penulis, tahun_terbit)
+        sql = "UPDATE buku SET judul = %s, penulis = %s, tahun_terbit = %s WHERE id_buku = %s"
+        val = (judul, penulis, tahun_terbit, id_buku)
         cursor.execute(sql, val)
         self.db.commit()
         cursor.close()
