@@ -7,20 +7,23 @@ class BukuController:
         self.user_role = user_role
         self.model = BukuModel()
         self.view = BukuView()
-
+        
         # Menampilkan informasi role pada judul jendela aplikasi
         self.view.title(f"Sistem Manajemen Perpustakaan - Mode: {self.user_role.upper()}")
-
-        # Binding tombol simpan
+        
+        # Binding tombol
         self.view.btn_simpan.configure(command=self.simpan_data)
-
-        # OTORISASI: Jika bukan admin, nonaktifkan form input dan tombol simpan
-        if self.user_role != "admin":
+        self.view.btn_logout.configure(command=self.logout)
+        
+        # OTORISASI: Jika bukan admin, nonaktifkan form input, tombol simpan, update, dan delete
+        if self.user_role == "anggota":
             self.view.btn_simpan.configure(state="disabled", text="Akses Terkunci (Khusus Admin)")
+            self.view.btn_update.configure(state="disabled")
+            self.view.btn_delete.configure(state="disabled")
             self.view.entry_judul.configure(state="disabled")
             self.view.entry_penulis.configure(state="disabled")
             self.view.entry_tahun.configure(state="disabled")
-
+            
         self.muat_data_tabel()
 
     def muat_data_tabel(self):
@@ -35,7 +38,7 @@ class BukuController:
         if self.user_role != "admin":
             messagebox.showerror("Akses Ditolak", "Anda tidak memiliki izin untuk menambah data!")
             return
-
+            
         judul = self.view.entry_judul.get()
         penulis = self.view.entry_penulis.get()
         tahun = self.view.entry_tahun.get()
@@ -53,6 +56,12 @@ class BukuController:
         else:
             messagebox.showerror("Error", "Gagal menyimpan data.")
 
+    def logout(self):
+        # Menutup jendela buku saat ini dan kembali ke halaman login
+        self.view.destroy()
+        from controllers.auth_controller import AuthController
+        app_auth = AuthController()
+        app_auth.run()
+
     def run(self):
         self.view.mainloop()
-        
